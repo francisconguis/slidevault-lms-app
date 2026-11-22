@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="SlideVault LMS" />
+  <title>SlideVault LMS — Mobile App</title>
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-dark: #312E81;
+      --ppt: #EA580C;
+      --ppt-bg: #FFEDD5;
+      --ex: #0D9488;
+      --ex-bg: #CCFBF1;
+      --bg: #F8FAFC;
+      --card: #FFFFFF;
+      --text: #0F172A;
+      --muted: #64748B;
+      --border: #E2E8F0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #0F172A;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 16px;
+      color: var(--text);
+    }
+
+    /* Desktop Phone Frame Wrapper */
+    .phone-frame {
+      width: 100%;
+      max-width: 412px;
+      height: 840px;
+      max-height: 92vh;
+      background: var(--bg);
+      border-radius: 38px;
+      border: 10px solid #1E293B;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), 0 0 0 2px #334155;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+        background: var(--bg);
+      }
+      .phone-frame {
+        max-width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+
+    /* Status Bar */
+    .status-bar {
+      background: var(--primary-dark);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 20px 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* App Header */
+    .app-header {
+      background: var(--primary-dark);
+      color: #FFFFFF;
+      padding: 10px 16px 16px;
+      border-bottom-left-radius: 22px;
+      border-bottom-right-radius: 22px;
+      box-shadow: 0 4px 12px rgba(49, 46, 129, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .logo-box {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--primary);
+      border: 1px solid #818CF8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .app-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .app-subtitle {
+      font-size: 11px;
+      color: #C7D2FE;
+      margin-top: 2px;
+    }
+
+    .role-btn {
+      border: 1px solid #818CF8;
+      background: var(--primary);
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 7px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: transform 0.15s ease;
+    }
+
+    .role-btn.student {
+      background: #059669;
+      border-color: #34D399;
+    }
+
+    .role-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Action Upload Buttons */
+    .quick-actions {
+      display: flex;
+      gap: 10px;
+      padding: 12px 16px 6px;
+    }
+
+    .action-btn {
+      flex: 1;
+      border: none;
+      border-radius: 12px;
+      padding: 11px 10px;
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    .action-btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-ppt {
+      background: var(--ppt);
+    }
+
+    .btn-ex {
+      background: var(--ex);
+    }
+
+    /* Search & Filter */
+    .search-wrap {
+      padding: 6px 16px;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 12px;
+      gap: 8px;
+    }
+
+    .search-box input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 13px;
+      color: var(--text);
+      background: transparent;
+    }
+
+    .course-chips {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      padding: 8px 16px 6px;
+      scrollbar-width: none;
+    }
+    .course-chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      border: 1px solid #CBD5E1;
+      background: #FFFFFF;
+      color: #475569;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      background: var(--primary-dark);
+      color: #FFFFFF;
+      border-color: var(--primary-dark);
+    }
+
+    .chip.add-course {
+      background: #EEF2FF;
+      color: var(--primary);
+      border-color: #C7D2FE;
+    }
+
+    /* Main Scroll Content */
+    .content-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 16px 24px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .stat-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      border-radius: 12px;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .stat-card.ppt {
+      border-left-color: var(--ppt);
+    }
+
+    .stat-card.ex {
+      border-left-color: var(--ex);
+    }
+
+    .stat-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .stat-lbl {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Section Header */
+    .sec-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 0 8px;
+    }
+
+    .sec-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .sec-link {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* Resource Card */
+    .res-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 13px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: transform 0.12s, box-shadow 0.12s;
+    }
+
+    .res-card:hover {
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    }
+
+    .res-top {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+    }
+
+    .res-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .res-icon.ppt {
+      background: var(--ppt-bg);
+      color: var(--ppt);
+    }
+
+    .res-icon.ex {
+      background: var(--ex-bg);
+      color: var(--ex);
+    }
+
+    .res-meta-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3px;
+    }
+
+    .course-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .badge-pill {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    .badge-pill.ppt {
+      background: var(--ppt-bg);
+      color: #C2410C;
+    }
+
+    .badge-pill.ex {
+      background: var(--ex-bg);
+      color: #0F766E;
+    }
+
+    .res-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .res-desc {
+      font-size: 12px;
+      color: #475569;
+      margin-top: 7px;
+      line-height: 1.45;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .res-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid #F1F5F9;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .file-name-span {
+      max-width: 62%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Empty Box */
+    .empty-box {
+      background: #FFFFFF;
+      border: 1px dashed #CBD5E1;
+      border-radius: 14px;
+      padding: 22px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      background: #FFFFFF;
+      border-top: 1px solid var(--border);
+      display: flex;
+      padding: 8px 0 10px;
+    }
+
+    .nav-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .nav-btn.active {
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .nav-btn.active-ppt {
+      color: var(--ppt);
+      font-weight: 800;
+    }
+
+    .nav-btn.active-ex {
+      color: var(--ex);
+      font-weight: 800;
+    }
+
+    .nav-icon {
+      font-size: 19px;
+    }
+
+    /* Modal Sheet */
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.58);
+      display: none;
+      align-items: flex-end;
+      z-index: 50;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      width: 100%;
+      max-height: 88%;
+      background: #FFFFFF;
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
+      padding: 18px;
+      overflow-y: auto;
+      animation: slideUp 0.2s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(40px);
+        opacity: 0.5;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .sheet-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .sheet-title {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .close-btn {
+      border: none;
+      background: #F1F5F9;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      color: #475569;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+      margin: 11px 0 5px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      border: 1px solid #CBD5E1;
+      background: #F8FAFC;
+      border-radius: 10px;
+      padding: 9px 11px;
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+    }
+
+    .form-textarea {
+      min-height: 68px;
+      resize: vertical;
+    }
+
+    .file-drop {
+      border: 2px dashed #818CF8;
+      background: #EEF2FF;
+      border-radius: 14px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      display: block;
+    }
+
+    .file-drop.ppt-active {
+      border-color: var(--ppt);
+      background: #FFF7ED;
+    }
+
+    .file-drop.ex-active {
+      border-color: var(--ex);
+      background: #F0FDFA;
+    }
+
+    .sample-btn {
+      margin-top: 7px;
+      width: 100%;
+      border: 1px solid #CBD5E1;
+      background: #F8FAFC;
+      color: var(--primary);
+      padding: 7px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .submit-btn {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-top: 16px;
+      cursor: pointer;
+    }
+
+    .file-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #F8FAFC;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px;
+      margin: 12px 0;
+      gap: 10px;
+    }
+
+    .download-btn {
+      background: var(--primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .topic-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 12px;
+      color: #334155;
+      border-bottom: 1px solid #F1F5F9;
+    }
+
+    .topic-num {
+      background: var(--ppt-bg);
+      color: #C2410C;
+      font-weight: 800;
+      font-size: 11px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sub-item {
+      background: #F0FDFA;
+      border: 1px solid #99F6E4;
+      border-radius: 10px;
+      padding: 9px 11px;
+      margin-top: 7px;
+      font-size: 12px;
+    }
+
+    .delete-btn {
+      width: 100%;
+      background: #FEF2F2;
+      color: #DC2626;
+      border: 1px solid #FECACA;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-frame">
+    <!-- Mobile Status Bar -->
+    <div class="status-bar">
+      <span id="clockText">11:36 AM</span>
+      <span>5G • 100% 🔋</span>
+    </div>
+
+    <!-- App Header -->
+    <div class="app-header">
+      <div class="brand-group">
+        <div class="logo-box">📊</div>
+        <div>
+          <div class="app-title">SlideVault LMS</div>
+          <div class="app-subtitle">PPT Presentation & Exercise Storage</div>
+        </div>
+      </div>
+      <button id="roleBtn" class="role-btn" onclick="toggleRole()">
+        🎓 Instructor ⇄
+      </button>
+    </div>
+
+    <!-- Quick Upload Bar -->
+    <div class="quick-actions">
+      <button class="action-btn btn-ppt" onclick="openModal('pptModal')">
+        📤 + Upload PPT
+      </button>
+      <button class="action-btn btn-ex" onclick="openModal('exModal')">
+        📝 + Upload Exercise
+      </button>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-wrap">
+      <div class="search-box">
+        <span>🔍</span>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search PPT slides, exercises, or files..."
+          oninput="renderApp()"
+        />
+      </div>
+    </div>
+
+    <!-- Course Filter Chips -->
+    <div class="course-chips" id="courseChips"></div>
+
+    <!-- Main Scrollable Content -->
+    <div class="content-area" id="mainContent"></div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="bottom-nav">
+      <button class="nav-btn active" id="tab-dashboard" onclick="switchTab('dashboard')">
+        <span class="nav-icon">🏠</span>
+        <span>Home</span>
+      </button>
+      <button class="nav-btn" id="tab-ppts" onclick="switchTab('ppts')">
+        <span class="nav-icon">📊</span>
+        <span>PPT Files</span>
+      </button>
+      <button class="nav-btn" id="tab-exercises" onclick="switchTab('exercises')">
+        <span class="nav-icon">📝</span>
+        <span>Exercises</span>
+      </button>
+      <button class="nav-btn" id="tab-courses" onclick="switchTab('courses')">
+        <span class="nav-icon">📁</span>
+        <span>Courses</span>
+      </button>
+    </div>
+
+    <!-- Modal: Upload PPT -->
+    <div class="modal-overlay" id="pptModal">
+      <div class="modal-sheet">
+        <div class="sheet-head">
+          <div class="sheet-title">📊 Upload Presentation (PPT)</div>
+          <button class="close-btn" onclick="closeModal('pptModal')">✕</button>
+        </div>
+
+        <label class="form-label">1. Select Course / Subject</label>
+        <select id="pptCourse" class="form-select"></select>
+
+        <label class="form-label">2. Choose PPT / PPTX / PDF File</label>
+        <label class="file-drop" id="pptDropLabel">
+          <input
+            type="file"
+            id="pptFileInput"
+            accept=".ppt,.pptx,.pdf,.key"
+            style="display:none"
+            onchange="handlePptFileSelect(event)"
+          />
+          <div id="pptFileText" style="font-size:13px;font-weight:700;color:#3730A3;">
+            📁 Tap to Browse Device for .PPT / .PPTX File
+          </div>
+          <div style="font-size:11px;color:#6366F1;margin-top:3px;">
+            Supports PowerPoint (.ppt, .pptx) & PDF slide decks
+          </div>
+        </label>
+        <button type="button" class="sample-btn" onclick="attachSamplePpt()">
+          ✨ Quick Demo: Attach Sample .PPTX Presentation
+        </button>
+
+        <label class="form-label">3. Presentation Title *</label>
+        <input
+          type="text"
+          id="pptTitle"
+          class="form-input"
+          placeholder="e.g., Week 4: Mobile UI Architecture"
+        />
+
+        <label class="form-label">4. Number of Slides</label>
+        <input
+          type="number"
+          id="pptSlides"
+          class="form-input"
+          value="24"
+        />
+
+        <label class="form-label">5. Description / Lecture Summary</label>
+        <textarea
+          id="pptDesc"
+          class="form-textarea"
+          placeholder="Overview of topics covered in this presentation..."
+        ></textarea>
+
+        <label class="form-label">6. Slide Outline (1 per line, optional)</label>
+        <textarea
+          id="pptTopics"
+          class="form-textarea"
+          placeholder="Slide 1-5: Introduction&#10;Slide 6-15: Core Concepts"
+        ></textarea>
+
+        <button
+          class="submit-btn"
+          style="background: var(--ppt)"
+          onclick="savePptUpload()"
+        >
+          ☁️ Save & Upload PPT
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal: Upload Exercise -->
+    <div class="modal-overlay" id="exModal">
+      <div class="modal-sheet">
+        <div class="sheet-head">
+          <div class="sheet-title">📝 Upload Exercise / Activity</div>
+          <button class="close-btn" onclick="closeModal('exModal')">✕</button>
+        </div>
+
+        <label class="form-label">1. Select Course / Subject</label>
+        <select id="exCourse" class="form-select"></select>
+
+        <label class="form-label">2. Attach Exercise Worksheet / File</label>
+        <label class="file-drop" id="exDropLabel">
+          <input
+            type="file"
+            id="exFileInput"
+            style="display:none"
+            onchange="handleExFileSelect(event)"
+          />
+          <div id="exFileText" style="font-size:13px;font-weight:700;color:#0F766E;">
+            📎 Tap to Attach Exercise File (.pdf, .docx, .pptx, .zip)
+          </div>
+        </label>
+        <button type="button" class="sample-btn" onclick="attachSampleEx()">
+          ✨ Quick Demo: Attach Sample Lab Exercise PDF
+        </button>
+
+        <label class="form-label">3. Exercise Title *</label>
+        <input
+          type="text"
+          id="exTitle"
+          class="form-input"
+          placeholder="e.g., Lab Exercise 2: File Upload Interface"
+        />
+
+        <div style="display:flex;gap:8px;">
+          <div style="flex:2">
+            <label class="form-label">Due Date</label>
+            <input
+              type="text"
+              id="exDue"
+              class="form-input"
+              value="Nov 20, 2026 • 11:59 PM"
+            />
+          </div>
+          <div style="flex:1">
+            <label class="form-label">Points</label>
+            <input
+              type="number"
+              id="exPoints"
+              class="form-input"
+              value="100"
+            />
+          </div>
+        </div>
+
+        <label class="form-label">4. Exercise Instructions</label>
+        <textarea
+          id="exInst"
+          class="form-textarea"
+          placeholder="Step-by-step instructions for students..."
+        ></textarea>
+
+        <button
+          class="submit-btn"
+          style="background: var(--ex)"
+          onclick="saveExUpload()"
+        >
+          ☁️ Publish Exercise to LMS
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal: Add Course -->
+    <div class="modal-overlay" id="courseModal">
+      <div class="modal-sheet">
+        <div class="sheet-head">
+          <div class="sheet-title">📁 Create New LMS Course</div>
+          <button class="close-btn" onclick="closeModal('courseModal')">✕</button>
+        </div>
+
+        <label class="form-label">Course Code *</label>
+        <input type="text" id="newCourseCode" class="form-input" placeholder="e.g., IT 305" />
+
+        <label class="form-label">Course Name *</label>
+        <input type="text" id="newCourseName" class="form-input" placeholder="e.g., Web & Mobile Systems" />
+
+        <label class="form-label">Instructor Name</label>
+        <input type="text" id="newCourseInst" class="form-input" placeholder="e.g., Prof. D. Garcia" />
+
+        <button class="submit-btn" style="background: var(--primary)" onclick="saveNewCourse()">
+          ➕ Create Course Folder
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal: View Resource Detail -->
+    <div class="modal-overlay" id="detailModal">
+      <div class="modal-sheet" id="detailSheetContent"></div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'slidevault_lms_mobile_v1';
+
+    const DEFAULT_STATE = {
+      role: 'teacher',
+      activeTab: 'dashboard',
+      courseFilter: 'ALL',
+      courses: [
+        { id: 'c1', code: 'IT 301', name: 'Mobile App Development', instructor: 'Prof. R. Santos', color: '#4F46E5' },
+        { id: 'c2', code: 'CS 204', name: 'Data Structures & Algorithms', instructor: 'Dr. A. Reyes', color: '#0EA5E9' },
+        { id: 'c3', code: 'IT 208', name: 'Database Management Systems', instructor: 'Prof. M. Cruz', color: '#10B981' }
+      ],
+      presentations: [
+        {
+          id: 'ppt1',
+          courseId: 'c1',
+          title: 'Week 1: Introduction to Mobile LMS Architecture',
+          description: 'Covers mobile UI layout, state persistence, document picking, and storing presentation files.',
+          fileName: 'Week1_Mobile_LMS_Architecture.pptx',
+          fileSize: '4.2 MB',
+          slideCount: 24,
+          uploadedBy: 'Prof. R. Santos',
+          uploadedAt: 'Nov 02, 2026 • 09:30 AM',
+          dataUrl: null,
+          topics: [
+            'Slide 1-5: Cross-Platform Mobile Development',
+            'Slide 6-14: Component Hierarchy & Styling',
+            'Slide 15-24: Uploading & Storing PPT Presentations'
+          ]
+        },
+        {
+          id: 'ppt2',
+          courseId: 'c2',
+          title: 'Module 3: Binary Search Trees & Heap Priority Queues',
+          description: 'Visual step-by-step walkthrough of tree traversals, BST insertion, and heapify operations.',
+          fileName: 'Module3_Trees_and_Heaps.pptx',
+          fileSize: '6.8 MB',
+          slideCount: 32,
+          uploadedBy: 'Dr. A. Reyes',
+          uploadedAt: 'Nov 04, 2026 • 02:15 PM',
+          dataUrl: null,
+          topics: [
+            'Slide 1-10: Tree Terminology & Representation',
+            'Slide 11-22: Inorder, Preorder & Postorder Traversals',
+            'Slide 23-32: Min-Heap & Max-Heap Implementation'
+          ]
+        },
+        {
+          id: 'ppt3',
+          courseId: 'c3',
+          title: 'Lecture 4: Entity-Relationship Diagrams & 3NF Normalization',
+          description: 'Designing relational database schemas and normalizing tables from 1NF to 3NF.',
+          fileName: 'Lecture4_ER_Normalization.ppt',
+          fileSize: '3.5 MB',
+          slideCount: 19,
+          uploadedBy: 'Prof. M. Cruz',
+          uploadedAt: 'Nov 05, 2026 • 11:00 AM',
+          dataUrl: null,
+          topics: [
+            'Slide 1-7: Entities, Attributes & Relationships',
+            'Slide 8-19: 1NF, 2NF, and 3NF Worked Examples'
+          ]
+        }
+      ],
+      exercises: [
+        {
+          id: 'ex1',
+          courseId: 'c1',
+          title: 'Lab Exercise 1: Build an LMS Presentation & Exercise Uploader',
+          instructions: 'Create a mobile interface where users can upload PowerPoint (.pptx) presentations and course exercises. Submit your screenshot or project zip.',
+          dueDate: 'Nov 12, 2026 • 11:59 PM',
+          points: 100,
+          fileName: 'Lab_Exercise_1_Guide.pdf',
+          fileSize: '850 KB',
+          uploadedBy: 'Prof. R. Santos',
+          uploadedAt: 'Nov 03, 2026 • 10:00 AM',
+          dataUrl: null,
+          submissions: [
+            {
+              id: 'sub1',
+              studentName: 'Juan Dela Cruz',
+              fileName: 'DelaCruz_Lab1_Output.zip',
+              fileSize: '1.4 MB',
+              submittedAt: 'Nov 05, 2026 • 04:20 PM',
+              dataUrl: null
+            }
+          ]
+        },
+        {
+          id: 'ex2',
+          courseId: 'c2',
+          title: 'Practice Exercise 2: Tree Traversal Worksheet',
+          instructions: 'Download the attached worksheet, trace the traversal outputs for the 3 given binary trees, and upload your completed answer file.',
+          dueDate: 'Nov 15, 2026 • 05:00 PM',
+          points: 50,
+          fileName: 'Exercise2_BST_Worksheet.docx',
+          fileSize: '540 KB',
+          uploadedBy: 'Dr. A. Reyes',
+          uploadedAt: 'Nov 04, 2026 • 01:45 PM',
+          dataUrl: null,
+          submissions: []
+        }
+      ]
+    };
+
+    let state = loadState();
+    let pendingPptFile = null;
+    let pendingExFile = null;
+    let pendingSubFile = null;
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return JSON.parse(JSON.stringify(DEFAULT_STATE));
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        alert('File metadata saved! (Large binary attachment kept in memory for this session).');
+      }
+    }
+
+    function formatSize(bytes) {
+      if (!bytes) return '1.5 MB';
+      if (bytes < 1024) return bytes + ' B';
+      const kb = bytes / 1024;
+      if (kb < 1024) return kb.toFixed(1) + ' KB';
+      return (kb / 1024).toFixed(2) + ' MB';
+    }
+
+    function nowFormatted() {
+      const d = new Date();
+      return d.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) +
+        ' • ' + d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function toggleRole() {
+      state.role = state.role === 'teacher' ? 'student' : 'teacher';
+      saveState();
+      renderApp();
+    }
+
+    function switchTab(tab) {
+      state.activeTab = tab;
+      saveState();
+      renderApp();
+    }
+
+    function setCourseFilter(courseId) {
+      state.courseFilter = courseId;
+      saveState();
+      renderApp();
+    }
+
+    function getCourse(id) {
+      return state.courses.find(c => c.id === id) || { code: 'LMS', name: 'General', color: '#4F46E5' };
+    }
+
+    function renderApp() {
+      // Role Button
+      const roleBtn = document.getElementById('roleBtn');
+      if (state.role === 'teacher') {
+        roleBtn.className = 'role-btn';
+        roleBtn.innerHTML = '🎓 Instructor ⇄';
+      } else {
+        roleBtn.className = 'role-btn student';
+        roleBtn.innerHTML = '🎒 Student ⇄';
+      }
+
+      // Course Chips
+      const chipsEl = document.getElementById('courseChips');
+      let chipsHtml = `<button class="chip ${state.courseFilter === 'ALL' ? 'active' : ''}" onclick="setCourseFilter('ALL')">All Courses</button>`;
+      state.courses.forEach(c => {
+        const active = state.courseFilter === c.id ? 'active' : '';
+        chipsHtml += `<button class="chip ${active}" onclick="setCourseFilter('${c.id}')">${c.code}</button>`;
+      });
+      chipsHtml += `<button class="chip add-course" onclick="openModal('courseModal')">+ New Course</button>`;
+      chipsEl.innerHTML = chipsHtml;
+
+      // Bottom Nav Active States
+      ['dashboard', 'ppts', 'exercises', 'courses'].forEach(t => {
+        const btn = document.getElementById('tab-' + t);
+        btn.className = 'nav-btn';
+        if (state.activeTab === t) {
+          if (t === 'ppts') btn.classList.add('active-ppt');
+          else if (t === 'exercises') btn.classList.add('active-ex');
+          else btn.classList.add('active');
+        }
+      });
+
+      const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+      const filteredPpts = state.presentations.filter(p => {
+        const matchCourse = state.courseFilter === 'ALL' || p.courseId === state.courseFilter;
+        const matchSearch = !q || p.title.toLowerCase().includes(q) || p.fileName.toLowerCase().includes(q) || p.description.toLowerCase().includes(q);
+        return matchCourse && matchSearch;
+      });
+
+      const filteredEx = state.exercises.filter(e => {
+        const matchCourse = state.courseFilter === 'ALL' || e.courseId === state.courseFilter;
+        const matchSearch = !q || e.title.toLowerCase().includes(q) || e.fileName.toLowerCase().includes(q) || e.instructions.toLowerCase().includes(q);
+        return matchCourse && matchSearch;
+      });
+
+      const main = document.getElementById('mainContent');
+
+      if (state.activeTab === 'dashboard') {
+        main.innerHTML = `
+          <div class="stats-grid">
+            <div class="stat-card ppt" onclick="switchTab('ppts')">
+              <div class="stat-val">${state.presentations.length}</div>
+              <div class="stat-lbl">PPT Files</div>
+            </div>
+            <div class="stat-card ex" onclick="switchTab('exercises')">
+              <div class="stat-val">${state.exercises.length}</div>
+              <div class="stat-lbl">Exercises</div>
+            </div>
+            <div class="stat-card" onclick="switchTab('courses')">
+              <div class="stat-val">${state.courses.length}</div>
+              <div class="stat-lbl">Courses</div>
+            </div>
+          </div>
+
+          <div class="sec-head">
+            <span class="sec-title">Stored Presentation Files (PPT)</span>
+            <button class="sec-link" onclick="switchTab('ppts')">View All (${filteredPpts.length})</button>
+          </div>
+          ${filteredPpts.length ? filteredPpts.slice(0, 3).map(renderPptCard).join('') : `<div class="empty-box">No PPT presentations found. Tap <b>+ Upload PPT</b> above!</div>`}
+
+          <div class="sec-head" style="margin-top:16px;">
+            <span class="sec-title">Uploaded Exercises & Labs</span>
+            <button class="sec-link" onclick="switchTab('exercises')">View All (${filteredEx.length})</button>
+          </div>
+          ${filteredEx.length ? filteredEx.slice(0, 3).map(renderExCard).join('') : `<div class="empty-box">No exercises found. Tap <b>+ Upload Exercise</b> above!</div>`}
+        `;
+      } else if (state.activeTab === 'ppts') {
+        main.innerHTML = `
+          <div class="sec-head">
+            <span class="sec-title">All PPT Presentations (${filteredPpts.length})</span>
+            <button class="sec-link" onclick="openModal('pptModal')">+ Upload PPT</button>
+          </div>
+          ${filteredPpts.length ? filteredPpts.map(renderPptCard).join('') : `<div class="empty-box">No presentations stored yet. Tap <b>+ Upload PPT</b> to add one.</div>`}
+        `;
+      } else if (state.activeTab === 'exercises') {
+        main.innerHTML = `
+          <div class="sec-head">
+            <span class="sec-title">All Course Exercises (${filteredEx.length})</span>
+            <button class="sec-link" onclick="openModal('exModal')">+ Upload Exercise</button>
+          </div>
+          ${filteredEx.length ? filteredEx.map(renderExCard).join('') : `<div class="empty-box">No exercises uploaded yet. Tap <b>+ Upload Exercise</b> to add one.</div>`}
+        `;
+      } else if (state.activeTab === 'courses') {
+        main.innerHTML = `
+          <div class="sec-head">
+            <span class="sec-title">LMS Course Folders (${state.courses.length})</span>
+            <button class="sec-link" onclick="openModal('courseModal')">+ New Course</button>
+          </div>
+          ${state.courses.map(c => {
+            const pCount = state.presentations.filter(p => p.courseId === c.id).length;
+            const eCount = state.exercises.filter(e => e.courseId === c.id).length;
+            return `
+              <div class="res-card" onclick="setCourseFilter('${c.id}');switchTab('dashboard');">
+                <div class="res-top">
+                  <div class="res-icon" style="background:${c.color};color:#FFF;">📁</div>
+                  <div style="flex:1">
+                    <div class="course-tag" style="color:${c.color}">${c.code}</div>
+                    <div class="res-title">${c.name}</div>
+                    <div style="font-size:12px;color:#64748B;margin-top:2px;">${c.instructor}</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div class="badge-pill ppt" style="margin-bottom:4px;">${pCount} PPTs</div>
+                    <div class="badge-pill ex">${eCount} Exercises</div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+          <button class="sample-btn" style="margin-top:12px;" onclick="resetDemoData()">🔄 Reset Sample LMS Data</button>
+        `;
+      }
+    }
+
+    function renderPptCard(ppt) {
+      const c = getCourse(ppt.courseId);
+      return `
+        <div class="res-card" onclick="openDetail('${ppt.id}', 'ppt')">
+          <div class="res-top">
+            <div class="res-icon ppt">📊</div>
+            <div style="flex:1">
+              <div class="res-meta-top">
+                <span class="course-tag" style="color:${c.color}">${c.code} • ${c.name}</span>
+                <span class="badge-pill ppt">PPTX</span>
+              </div>
+              <div class="res-title">${ppt.title}</div>
+            </div>
+          </div>
+          <div class="res-desc">${ppt.description}</div>
+          <div class="res-foot">
+            <span class="file-name-span">📎 ${ppt.fileName} (${ppt.fileSize})</span>
+            <span style="color:#EA580C;">📑 ${ppt.slideCount} slides</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderExCard(ex) {
+      const c = getCourse(ex.courseId);
+      const subCount = ex.submissions ? ex.submissions.length : 0;
+      return `
+        <div class="res-card" onclick="openDetail('${ex.id}', 'ex')">
+          <div class="res-top">
+            <div class="res-icon ex">📝</div>
+            <div style="flex:1">
+              <div class="res-meta-top">
+                <span class="course-tag" style="color:${c.color}">${c.code} • ${c.name}</span>
+                <span class="badge-pill ex">${ex.points} pts</span>
+              </div>
+              <div class="res-title">${ex.title}</div>
+            </div>
+          </div>
+          <div class="res-desc">${ex.instructions}</div>
+          <div class="res-foot">
+            <span style="color:#B45309;">📅 Due: ${ex.dueDate}</span>
+            <span style="color:#0D9488;">✅ ${subCount} Submitted</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function populateCourseSelects() {
+      const opts = state.courses.map(c => `<option value="${c.id}">${c.code} — ${c.name}</option>`).join('');
+      document.getElementById('pptCourse').innerHTML = opts;
+      document.getElementById('exCourse').innerHTML = opts;
+    }
+
+    function openModal(id) {
+      populateCourseSelects();
+      document.getElementById(id).classList.add('open');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    function handlePptFileSelect(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        pendingPptFile = {
+          name: file.name,
+          size: formatSize(file.size),
+          dataUrl: evt.target.result
+        };
+        document.getElementById('pptDropLabel').classList.add('ppt-active');
+        document.getElementById('pptFileText').innerText = `✅ Attached: ${file.name} (${pendingPptFile.size})`;
+        const titleInput = document.getElementById('pptTitle');
+        if (!titleInput.value.trim()) {
+          titleInput.value = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ');
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function attachSamplePpt() {
+      const num = Math.floor(Math.random() * 8) + 2;
+      pendingPptFile = {
+        name: `Module_${num}_Lecture_Slides.pptx`,
+        size: '4.9 MB',
+        dataUrl: null
+      };
+      document.getElementById('pptDropLabel').classList.add('ppt-active');
+      document.getElementById('pptFileText').innerText = `✅ Attached: ${pendingPptFile.name} (${pendingPptFile.size})`;
+      if (!document.getElementById('pptTitle').value.trim()) {
+        document.getElementById('pptTitle').value = `Module ${num}: Mobile Storage & Cloud Sync`;
+      }
+      if (!document.getElementById('pptDesc').value.trim()) {
+        document.getElementById('pptDesc').value = 'Complete lecture presentation covering file handling, LMS storage schemas, and exercises.';
+      }
+    }
+
+    function savePptUpload() {
+      const title = document.getElementById('pptTitle').value.trim();
+      if (!title) return alert('Please enter a presentation title.');
+      if (!pendingPptFile) return alert('Please select a PPT file or tap "Attach Sample .PPTX Presentation".');
+
+      const topicsRaw = document.getElementById('pptTopics').value.trim();
+      const topics = topicsRaw
+        ? topicsRaw.split('\n').map(s => s.trim()).filter(Boolean)
+        : [
+            'Slide 1-6: Introduction & Learning Objectives',
+            'Slide 7-16: Core Concepts & Architecture',
+            'Slide 17-24: Summary & Review Questions'
+          ];
+
+      state.presentations.unshift({
+        id: 'ppt-' + Date.now(),
+        courseId: document.getElementById('pptCourse').value,
+        title,
+        description: document.getElementById('pptDesc').value.trim() || 'Uploaded presentation deck for student review.',
+        fileName: pendingPptFile.name,
+        fileSize: pendingPptFile.size,
+        slideCount: parseInt(document.getElementById('pptSlides').value, 10) || 20,
+        uploadedBy: state.role === 'teacher' ? 'Instructor' : 'Student Presenter',
+        uploadedAt: nowFormatted(),
+        dataUrl: pendingPptFile.dataUrl,
+        topics
+      });
+
+      pendingPptFile = null;
+      document.getElementById('pptTitle').value = '';
+      document.getElementById('pptDesc').value = '';
+      document.getElementById('pptTopics').value = '';
+      document.getElementById('pptDropLabel').classList.remove('ppt-active');
+      document.getElementById('pptFileText').innerText = '📁 Tap to Browse Device for .PPT / .PPTX File';
+
+      saveState();
+      closeModal('pptModal');
+      renderApp();
+    }
+
+    function handleExFileSelect(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        pendingExFile = {
+          name: file.name,
+          size: formatSize(file.size),
+          dataUrl: evt.target.result
+        };
+        document.getElementById('exDropLabel').classList.add('ex-active');
+        document.getElementById('exFileText').innerText = `✅ Attached: ${file.name} (${pendingExFile.size})`;
+        const titleInput = document.getElementById('exTitle');
+        if (!titleInput.value.trim()) {
+          titleInput.value = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ');
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function attachSampleEx() {
+      const num = Math.floor(Math.random() * 8) + 2;
+      pendingExFile = {
+        name: `Laboratory_Exercise_${num}_Worksheet.pdf`,
+        size: '780 KB',
+        dataUrl: null
+      };
+      document.getElementById('exDropLabel').classList.add('ex-active');
+      document.getElementById('exFileText').innerText = `✅ Attached: ${pendingExFile.name} (${pendingExFile.size})`;
+      if (!document.getElementById('exTitle').value.trim()) {
+        document.getElementById('exTitle').value = `Laboratory Exercise ${num}: Hands-On Activity`;
+      }
+      if (!document.getElementById('exInst').value.trim()) {
+        document.getElementById('exInst').value = 'Download the worksheet file, answer all items, and upload your completed exercise document below.';
+      }
+    }
+
+    function saveExUpload() {
+      const title = document.getElementById('exTitle').value.trim();
+      if (!title) return alert('Please enter an exercise title.');
+      if (!pendingExFile) return alert('Please attach an exercise file or tap "Attach Sample Lab Exercise PDF".');
+
+      state.exercises.unshift({
+        id: 'ex-' + Date.now(),
+        courseId: document.getElementById('exCourse').value,
+        title,
+        instructions: document.getElementById('exInst').value.trim() || 'Complete the attached exercise file and upload your work.',
+        dueDate: document.getElementById('exDue').value.trim() || 'Nov 25, 2026 • 11:59 PM',
+        points: parseInt(document.getElementById('exPoints').value, 10) || 100,
+        fileName: pendingExFile.name,
+        fileSize: pendingExFile.size,
+        uploadedBy: 'Instructor',
+        uploadedAt: nowFormatted(),
+        dataUrl: pendingExFile.dataUrl,
+        submissions: []
+      });
+
+      pendingExFile = null;
+      document.getElementById('exTitle').value = '';
+      document.getElementById('exInst').value = '';
+      document.getElementById('exDropLabel').classList.remove('ex-active');
+      document.getElementById('exFileText').innerText = '📎 Tap to Attach Exercise File (.pdf, .docx, .pptx, .zip)';
+
+      saveState();
+      closeModal('exModal');
+      renderApp();
+    }
+
+    function saveNewCourse() {
+      const code = document.getElementById('newCourseCode').value.trim().toUpperCase();
+      const name = document.getElementById('newCourseName').value.trim();
+      const inst = document.getElementById('newCourseInst').value.trim() || 'Course Instructor';
+      if (!code || !name) return alert('Please enter Course Code and Course Name.');
+
+      const colors = ['#4F46E5', '#0EA5E9', '#10B981', '#D97706', '#E11D48', '#7C3AED'];
+      state.courses.push({
+        id: 'c-' + Date.now(),
+        code,
+        name,
+        instructor: inst,
+        color: colors[state.courses.length % colors.length]
+      });
+
+      document.getElementById('newCourseCode').value = '';
+      document.getElementById('newCourseName').value = '';
+      document.getElementById('newCourseInst').value = '';
+
+      saveState();
+      closeModal('courseModal');
+      renderApp();
+    }
+
+    function openDetail(id, type) {
+      pendingSubFile = null;
+      const isPpt = type === 'ppt';
+      const item = isPpt
+        ? state.presentations.find(p => p.id === id)
+        : state.exercises.find(e => e.id === id);
+      if (!item) return;
+
+      const c = getCourse(item.courseId);
+      const sheet = document.getElementById('detailSheetContent');
+
+      if (isPpt) {
+        sheet.innerHTML = `
+          <div class="sheet-head">
+            <span class="badge-pill ppt">📊 PPT PRESENTATION</span>
+            <button class="close-btn" onclick="closeModal('detailModal')">✕</button>
+          </div>
+          <div style="font-size:12px;font-weight:800;color:${c.color};">${c.code} • ${c.name}</div>
+          <div style="font-size:18px;font-weight:800;margin-top:4px;">${item.title}</div>
+          <div style="font-size:11px;color:#64748B;margin-top:4px;">
+            Uploaded by ${item.uploadedBy} • ${item.uploadedAt} • ${item.slideCount} Slides
+          </div>
+
+          <div class="file-box">
+            <div>
+              <div style="font-size:13px;font-weight:800;">📎 ${item.fileName}</div>
+              <div style="font-size:11px;color:#64748B;">Size: ${item.fileSize} • Stored in LMS Vault</div>
+            </div>
+            <button class="download-btn" onclick="downloadResource('${item.id}', 'ppt')">⬇ Download / Open</button>
+          </div>
+
+          <div class="form-label">Presentation Summary</div>
+          <div style="font-size:13px;color:#475569;line-height:1.5;">${item.description}</div>
+
+          <div class="form-label" style="margin-top:14px;">Slide Deck Outline</div>
+          <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:8px 12px;">
+            ${(item.topics || []).map((t, i) => `
+              <div class="topic-item">
+                <span class="topic-num">${i + 1}</span>
+                <span>${t}</span>
+              </div>
+            `).join('')}
+          </div>
+
+          <button class="delete-btn" onclick="deleteResource('${item.id}', 'ppt')">🗑 Remove Presentation from Storage</button>
+        `;
+      } else {
+        const subs = item.submissions || [];
+        sheet.innerHTML = `
+          <div class="sheet-head">
+            <span class="badge-pill ex">📝 LMS EXERCISE • ${item.points} PTS</span>
+            <button class="close-btn" onclick="closeModal('detailModal')">✕</button>
+          </div>
+          <div style="font-size:12px;font-weight:800;color:${c.color};">${c.code} • ${c.name}</div>
+          <div style="font-size:18px;font-weight:800;margin-top:4px;">${item.title}</div>
+          <div style="font-size:12px;color:#B45309;font-weight:700;margin-top:5px;">📅 Due: ${item.dueDate}</div>
+
+          <div class="file-box">
+            <div>
+              <div style="font-size:13px;font-weight:800;">📎 ${item.fileName}</div>
+              <div style="font-size:11px;color:#64748B;">Size: ${item.fileSize} • Exercise Worksheet</div>
+            </div>
+            <button class="download-btn" onclick="downloadResource('${item.id}', 'ex')">⬇ Download</button>
+          </div>
+
+          <div class="form-label">Exercise Instructions</div>
+          <div style="font-size:13px;color:#475569;line-height:1.5;">${item.instructions}</div>
+
+          <div style="background:#F8FAFC;border:1px solid #CBD5E1;border-radius:14px;padding:12px;margin-top:14px;">
+            <div style="font-size:13px;font-weight:800;margin-bottom:8px;">📤 Upload Student Exercise Submission</div>
+            <input type="text" id="subStudentName" class="form-input" value="Student User" placeholder="Your Name" style="margin-bottom:8px;" />
+            <label class="file-drop" id="subDropLabel" style="padding:10px;">
+              <input type="file" style="display:none" onchange="handleSubFileSelect(event)" />
+              <div id="subFileText" style="font-size:12px;font-weight:700;color:#4F46E5;">
+                📎 Tap to Select Completed Answer File from Device
+              </div>
+            </label>
+            <button type="button" class="sample-btn" onclick="attachSampleSub()">+ Or Attach Sample Answer File</button>
+            <button class="submit-btn" style="background:var(--ex);margin-top:10px;padding:10px;" onclick="submitExerciseWork('${item.id}')">
+              ✅ Submit Exercise Output
+            </button>
+          </div>
+
+          <div class="form-label" style="margin-top:14px;">Submitted Exercise Files (${subs.length})</div>
+          ${subs.length ? subs.map(s => `
+            <div class="sub-item">
+              <div style="font-weight:800;">📄 ${s.fileName} (${s.fileSize})</div>
+              <div style="color:#475569;font-size:11px;margin-top:2px;">By ${s.studentName} • ${s.submittedAt}</div>
+            </div>
+          `).join('') : `<div style="font-size:12px;color:#64748B;">No student submissions yet.</div>`}
+
+          <button class="delete-btn" onclick="deleteResource('${item.id}', 'ex')">🗑 Remove Exercise from Storage</button>
+        `;
+      }
+
+      openModal('detailModal');
+    }
+
+    function handleSubFileSelect(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      pendingSubFile = {
+        name: file.name,
+        size: formatSize(file.size)
+      };
+      document.getElementById('subFileText').innerText = `✅ Ready: ${file.name} (${pendingSubFile.size})`;
+    }
+
+    function attachSampleSub() {
+      pendingSubFile = {
+        name: `Student_Exercise_Solution_${Date.now().toString().slice(-3)}.pdf`,
+        size: '910 KB'
+      };
+      document.getElementById('subFileText').innerText = `✅ Ready: ${pendingSubFile.name} (${pendingSubFile.size})`;
+    }
+
+    function submitExerciseWork(exId) {
+      if (!pendingSubFile) return alert('Please select an answer file or tap "+ Or Attach Sample Answer File".');
+      const studentName = document.getElementById('subStudentName').value.trim() || 'Student User';
+      const ex = state.exercises.find(e => e.id === exId);
+      if (!ex) return;
+      ex.submissions = ex.submissions || [];
+      ex.submissions.unshift({
+        id: 'sub-' + Date.now(),
+        studentName,
+        fileName: pendingSubFile.name,
+        fileSize: pendingSubFile.size,
+        submittedAt: nowFormatted()
+      });
+      saveState();
+      openDetail(exId, 'ex');
+      renderApp();
+    }
+
+    function downloadResource(id, type) {
+      const item = type === 'ppt'
+        ? state.presentations.find(p => p.id === id)
+        : state.exercises.find(e => e.id === id);
+      if (!item) return;
+
+      if (item.dataUrl) {
+        const a = document.createElement('a');
+        a.href = item.dataUrl;
+        a.download = item.fileName;
+        a.click();
+      } else {
+        const blob = new Blob(
+          [`SlideVault LMS Stored File\nTitle: ${item.title}\nFile: ${item.fileName}\nUploaded: ${item.uploadedAt}`],
+          { type: 'text/plain;charset=utf-8' }
+        );
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = item.fileName + '.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    function deleteResource(id, type) {
+      if (type === 'ppt') {
+        state.presentations = state.presentations.filter(p => p.id !== id);
+      } else {
+        state.exercises = state.exercises.filter(e => e.id !== id);
+      }
+      saveState();
+      closeModal('detailModal');
+      renderApp();
+    }
+
+    function resetDemoData() {
+      state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      saveState();
+      renderApp();
+    }
+
+    renderApp();
+  </script>
+</body>
+</html>
+
