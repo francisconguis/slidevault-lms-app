@@ -52,7 +52,7 @@ git remote remove origin >nul 2>nul
 git remote add origin https://github.com/francisconguis/slidevault-lms-app.git
 
 echo [5/5] Pushing to GitHub (sign in if a GitHub window pops up)...
-git push -u origin main
+git push -u origin main --force
 
 echo.
 echo ============================================================
