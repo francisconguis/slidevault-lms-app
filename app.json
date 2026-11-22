@@ -18,6 +18,10 @@
     },
     "web": {
       "bundler": "metro"
-    }
+    },
+    "plugins": [
+      "expo-status-bar",
+      "expo-sharing"
+    ]
   }
 }
