@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -40,8 +42,11 @@ export default function AddCourseModal({ visible, onClose, onAddCourse }) {
   };
 
   return (
-    <Modal visible={visible} animationType="fade" transparent>
-      <View style={styles.overlay}>
+    <Modal visible={visible} animationType="fade" transparent onRequestClose={onClose}>
+      <KeyboardAvoidingView
+        style={styles.overlay}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
         <View style={styles.card}>
           <View style={styles.headerRow}>
             <Text style={styles.title}>Create New LMS Course</Text>
@@ -97,7 +102,7 @@ export default function AddCourseModal({ visible, onClose, onAddCourse }) {
             <Text style={styles.saveBtnText}>Add Course Folder</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

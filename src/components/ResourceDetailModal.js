@@ -8,6 +8,8 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import * as Sharing from 'expo-sharing';
@@ -55,7 +57,7 @@ export default function ResourceDetailModal({
   const handlePickStudentFile = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: ['*/*'],
+        type: '*/*',
         copyToCacheDirectory: true,
       });
 
@@ -107,8 +109,11 @@ export default function ResourceDetailModal({
   };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent>
-      <View style={styles.overlay}>
+    <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
+      <KeyboardAvoidingView
+        style={styles.overlay}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
         <View style={styles.sheet}>
           <View style={styles.topRow}>
             <View
@@ -345,7 +350,7 @@ export default function ResourceDetailModal({
             </TouchableOpacity>
           </ScrollView>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

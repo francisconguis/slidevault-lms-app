@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   View,
@@ -8,6 +8,8 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { Ionicons } from '@expo/vector-icons';
@@ -28,15 +30,16 @@ export default function UploadPptModal({
   const [keyTopicsText, setKeyTopicsText] = useState('');
   const [pickedFile, setPickedFile] = useState(null);
 
+  useEffect(() => {
+    if (courses.length > 0 && !courses.some((c) => c.id === selectedCourseId)) {
+      setSelectedCourseId(courses[0].id);
+    }
+  }, [courses, selectedCourseId]);
+
   const handlePickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: [
-          'application/vnd.ms-powerpoint',
-          'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-          'application/pdf',
-          '*/*',
-        ],
+        type: '*/*',
         copyToCacheDirectory: true,
       });
 
@@ -136,8 +139,11 @@ export default function UploadPptModal({
   };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent>
-      <View style={styles.overlay}>
+    <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
+      <KeyboardAvoidingView
+        style={styles.overlay}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
         <View style={styles.sheet}>
           <View style={styles.sheetHeader}>
             <View style={styles.headerTitleRow}>
@@ -303,7 +309,7 @@ export default function UploadPptModal({
             </View>
           </ScrollView>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
